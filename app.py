@@ -3,14 +3,38 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 import numpy as np
 from PIL import Image
+import os
+import gdown
 
+# --------------------------
+# KONFIGURASI STREAMLIT
+# --------------------------
 st.set_page_config(page_title="Klasifikasi Citra Asli vs Generatif AI", layout="centered")
 st.title("🧠 Klasifikasi Citra Asli vs Generatif AI Berbasis CNN")
 st.markdown("Aplikasi ini menggunakan tiga model CNN: **ResNet50**, **Xception**, dan **EfficientNetB0**")
 
-# Load model (gunakan cache agar lebih efisien)
+# --------------------------
+# DOWNLOAD MODEL DARI GOOGLE DRIVE (jika belum ada)
+# --------------------------
+def download_model_if_not_exists():
+    models = {
+        "resnet50_model.h5": "GDRIVE_ID_REPLACE_THIS_1",
+        "xception_model.h5": "GDRIVE_ID_REPLACE_THIS_2",
+        "efficientnetb0_model.h5": "GDRIVE_ID_REPLACE_THIS_3"
+    }
+
+    for filename, file_id in models.items():
+        if not os.path.exists(filename):
+            st.info(f"🔽 Mengunduh {filename} dari Google Drive...")
+            url = f"https://drive.google.com/uc?id={file_id}"
+            gdown.download(url, filename, quiet=False)
+
+# --------------------------
+# LOAD MODEL DENGAN CACHE
+# --------------------------
 @st.cache_resource
 def load_models():
+    download_model_if_not_exists()
     resnet = tf.keras.models.load_model("resnet50_model.h5")
     xception = tf.keras.models.load_model("xception_model.h5")
     efficient = tf.keras.models.load_model("efficientnetb0_model.h5")
@@ -18,7 +42,9 @@ def load_models():
 
 resnet, xception, efficient = load_models()
 
-# Preprocessing image
+# --------------------------
+# PREPROCESS GAMBAR
+# --------------------------
 def preprocess_image(img, target_size=(224, 224)):
     img = img.resize(target_size)
     img_array = image.img_to_array(img)
@@ -26,7 +52,9 @@ def preprocess_image(img, target_size=(224, 224)):
     img_array = img_array / 255.0
     return img_array
 
-# Upload file
+# --------------------------
+# UPLOAD FILE
+# --------------------------
 uploaded = st.file_uploader("📤 Upload gambar (JPG/PNG)", type=["jpg", "jpeg", "png"])
 
 if uploaded is not None:
