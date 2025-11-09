@@ -18,9 +18,9 @@ st.markdown("Aplikasi ini menggunakan tiga model CNN: **ResNet50**, **Xception**
 # --------------------------
 def download_model_if_not_exists():
     models = {
-        "resnet50_model.h5": "GDRIVE_ID_REPLACE_THIS_1",
-        "xception_model.h5": "GDRIVE_ID_REPLACE_THIS_2",
-        "efficientnetb0_model.h5": "GDRIVE_ID_REPLACE_THIS_3"
+        "resnet50_model.h5": "1jwrh8zk139wr7ksS0zPAzCwSKi2HPAoB",
+        "xception_model.h5": "1jwrh8zk139wr7ksS0zPAzCwSKi2HPAoB",
+        "efficientnetb0_model.h5": "1b6imIi_aMvUfFRFBgMR1NHz_A19kTdcw"
     }
 
     for filename, file_id in models.items():
